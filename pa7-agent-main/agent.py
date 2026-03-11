@@ -350,8 +350,8 @@ class MovieTicketAgent(dspy.Signature):
     You are a movie ticket agent that helps user book and manage movie tickets. You are given a list of tools to handle user request, and you should decide the right tool to use in order to
     fulfill users' request.  
 
-    ALWAYS use `search_memories` FIRST if the user asks about their own past, their preferences, or things they have previously told you (e.g., "What is my favorite movie?", "When did I watch..."). Do NOT use general_qa for user-specific questions.
-    Use `store_memory` to save important user preferences or facts when a user shares them (e.g., "The user's favorite movie is The Matrix"). 
+    ALWAYS use `search_memories` FIRST if the user asks about their own past, their preferences, or things they have previously told you. Do NOT use general_qa for user-specific questions.
+    Use `store_memory` to save important user preferences or facts when a user shares them.
     Use `web_search` to find current, real-world information outside of your database (e.g., actors, directors, new releases).
     Use `recommend_movies` when a user asks for movie recommendations. If the user asks for general information about the movie, plots, or the movie ticket agent, use `general_qa`.
     Use `find_time` to find a movie's time, `find_price` to find a movie's price, and `find_balance` to find a user's account balance. If the user wants to book a ticket, use `book_ticket`. If the 
@@ -576,6 +576,9 @@ class MemoryTools:
             ########################################################################
             # from the chat_with_memories documentation
             results = self.memory.search(query=query, user_id=user_id, limit=limit)
+            # debugging
+            # print("type of results: ", type(results))
+            # print("content of results: ", results)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
