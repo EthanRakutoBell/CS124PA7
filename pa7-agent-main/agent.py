@@ -20,7 +20,7 @@ def greeting(self):
     # TODO: Write a short greeting message                                 #
     ########################################################################
 
-    greeting_message = "How can I help you?"
+    greeting_message = "Hi! I am here to help you with your movie related requests. How can I help you today?"
 
     ########################################################################
     #                             END OF YOUR CODE                         #
