@@ -161,6 +161,55 @@ def recommend_movies(user_name: str, k=3):
     ########################################################################
     # Populate this list with k movie indices to recommend to the user.
     recommendations = []
+    # item-item collaborative filtering:
+    # compute the similarity between movies based on user ratings
+    # for movie m, find other similar items
+    # rate m as a weighted average of the ratings of the similar items
+    # weighted by their similarity to m
+    # essentially predicting how much a user will like a given movie 
+    # by looking at how similar it is to movies they like
+    
+    # first, collect rated and unrated movie indices
+    rated_movies = []
+    unrated_movies = []
+
+    # binary list indicating whether the user has rated each movie created earlier
+    for i in range(len(user_ratings)):
+        if user_ratings[i] == 1:
+            rated_movies.append(i)
+        elif user_ratings[i] == 0:
+            unrated_movies.append(i)
+    
+    # for edge case when user has rated all movies, return empty list
+    if len(unrated_movies) == 0:
+        return []
+    
+    # now calculate a score for each unrated movie based on the ratings 
+    # of the rated movies and their similarity to the unrated movie
+    # array to store the scores for each unrated movie
+    movie_scores = []
+
+    # loop through each unrated movie and calculate a score for it
+    for unrated_movie in unrated_movies:
+        score = 0
+        # need to grab rating from ratings_matrix for the unrated movie
+        unrate = ratings_matrix[unrated_movie]
+
+        # now compare this unrated movie to each rated movie
+        for rated_movie in rated_movies:
+            rate = ratings_matrix[rated_movie]
+            # calculate similarity between the unrated movie and the rated movie
+            score += similarity(unrate, rate) 
+
+        movie_scores.append((score, unrated_movie)) # store score for sorting
+    
+    # now we have a score for each unrated movie, we can sort them and recommend the top k
+    movie_scores.sort(reverse=True)
+
+    # slice the top k movies and add their indices to the recommendations list
+    for score, movie_index in movie_scores[:k]:
+        recommendations.append(movie_index)
+
     
     ########################################################################
     #                          END OF YOUR CODE                            #
