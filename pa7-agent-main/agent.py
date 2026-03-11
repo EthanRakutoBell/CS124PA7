@@ -20,7 +20,7 @@ def greeting(self):
     # TODO: Write a short greeting message                                 #
     ########################################################################
 
-    greeting_message = "Hi! I am here to help you with your movie related requests. How can I help you today?"
+    greeting_message = "Hi! I am here to help you with your movie-related requests. How can I help you today?"
 
     ########################################################################
     #                             END OF YOUR CODE                         #
@@ -161,6 +161,7 @@ def recommend_movies(user_name: str, k=3):
     ########################################################################
     # Populate this list with k movie indices to recommend to the user.
     recommendations = []
+    
     
     ########################################################################
     #                          END OF YOUR CODE                            #
