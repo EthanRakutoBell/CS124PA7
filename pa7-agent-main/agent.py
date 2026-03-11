@@ -297,11 +297,13 @@ def book_ticket(user_name: str, movie_title: str):
     ticket_number = '0'
     user_balance = None
 
+    # handle edge case where user or movie is not found in the database
     if(user_name.lower() not in user_database):
         request_id = file_request(user_request=f"User requested ticket for '{movie_title}'", user_name=user_name)
         return (f"I couldn't complete the booking because the user '{user_name}' "
             f"was not found. A customer support request has been filed with "
             f"request id {request_id}.")
+    # handle edge case where movie is not found in the database
     if movie_title not in showtime_database:
         request_id = file_request(user_request=f"Book a ticket for '{movie_title}'", user_name=user_name)
         return (
@@ -309,16 +311,19 @@ def book_ticket(user_name: str, movie_title: str):
             f"was not found. A customer support request has been filed with "
             f"request id {request_id}."
         )
+    # if both user and movie are found, check balance and book ticket if possible
     profile = user_database[user_name.lower()]
     movie = showtime_database[movie_title]
     price = movie.price
     user_balance = profile.balance
 
+    # check if user does not have enough balance to book the ticket, return insufficient balance message
     if(user_balance < price):
         return f"Insufficient balance to book the ticket for {movie_title}."
+    # otherwise, book the ticket
     ticket_number = _generate_id(length=6)
     new_balance = user_balance - price
-    profile.balance = new_balance
+    profile.balance = new_balance # update balance in user_database
     ticket_database[ticket_number] = Ticket(user_name = profile.name, movie_title=movie_title, time = movie.start_time)
     ########################################################################
     #                          END OF YOUR CODE                            #
