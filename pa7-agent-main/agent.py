@@ -351,8 +351,8 @@ class MovieTicketAgent(dspy.Signature):
     fulfill users' request.  
 
     ALWAYS use `search_memories` FIRST if the user asks about their own past, their preferences, or things they have previously told you. Do NOT use general_qa for user-specific questions.
-    Use `store_memory` to save important user preferences or facts when a user shares them.
-    Use `web_search` to find current, real-world information outside of your database (e.g., actors, directors, new releases).
+    Use `store_memory` to save important user preferences, personal history, or facts when a user shares them.
+    Use `web_search` to find current, real-world information outside of your database (e.g., actors, directors, new releases). Formulate concise search queries and base final answer strictly on the exact text returned by search results. Do not guess or hallucinate information if the search results are unclear
     Use `recommend_movies` when a user asks for movie recommendations. If the user asks for general information about the movie, plots, or the movie ticket agent, use `general_qa`.
     Use `find_time` to find a movie's time, `find_price` to find a movie's price, and `find_balance` to find a user's account balance. If the user wants to book a ticket, use `book_ticket`. If the 
     request cannot be made with any of these functions, use `file_request` to file the request for customer support. If the request has multiple parts, break it down into sub-problems
@@ -452,7 +452,7 @@ class WebTools:
         # Parameters passed to the SerpAPI search endpoint.
         # We use Bing here, but SerpAPI supports multiple search engines.
         params = {
-            "engine": "bing",
+            "engine": "google", # changed to google
             "q": query,
             "api_key": self.serpapi_key,
             "count": num_results,
