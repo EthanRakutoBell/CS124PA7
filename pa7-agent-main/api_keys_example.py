@@ -1,6 +1,6 @@
 import os
 
-TOGETHER_API_KEY = ""
+TOGETHER_API_KEY = "b6cb97b25a881fdf65c1a2e3cc645bf3d5cc5e84667650323b338c645afecbf8"
 os.environ["TOGETHER_API_KEY"] = TOGETHER_API_KEY
 
 
