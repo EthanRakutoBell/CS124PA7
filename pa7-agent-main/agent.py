@@ -296,10 +296,34 @@ def book_ticket(user_name: str, movie_title: str):
     ########################################################################
     ticket_number = '0'
     user_balance = None
+
+    if(user_name.lower() not in user_database):
+        request_id = file_request(user_request=f"User requested ticket for '{movie_title}'", user_name=user_name)
+        return (f"I couldn't complete the booking because the user '{user_name}' "
+            f"was not found. A customer support request has been filed with "
+            f"request id {request_id}.")
+    if movie_title not in showtime_database:
+        request_id = file_request(user_request=f"Book a ticket for '{movie_title}'", user_name=user_name)
+        return (
+            f"I couldn't complete the booking because the movie '{movie_title}' "
+            f"was not found. A customer support request has been filed with "
+            f"request id {request_id}."
+        )
+    profile = user_database[user_name.lower()]
+    movie = showtime_database[movie_title]
+    price = movie.price
+    user_balance = profile.balance
+
+    if(user_balance < price):
+        return f"Insufficient balance to book the ticket for {movie_title}."
+    ticket_number = _generate_id(length=6)
+    new_balance = user_balance - price
+    profile.balance = new_balance
+    ticket_database[ticket_number] = Ticket(user_name = profile.name, movie_title=movie_title, time = movie.start_time)
     ########################################################################
     #                          END OF YOUR CODE                            #
     ########################################################################
-    return f"Ticket booked successfully for {user_name} for the movie {movie_title}. The ticket number is {ticket_number}. Your new balance is {user_balance}."
+    return f"Ticket booked successfully for {user_name} for the movie {movie_title}. The ticket number is {ticket_number}. Your new balance is {new_balance}."
 
 
 ## Integrating tools into an LLM agent: you will use the agent below for part 1
@@ -319,7 +343,13 @@ class MovieTicketAgent(dspy.Signature):
     ########################################################################
     """
     You are a movie ticket agent that helps user book and manage movie tickets. You are given a list of tools to handle user request, and you should decide the right tool to use in order to
-    fulfill users' request.  [TODO: add more details about the agent's objective and strategy here!]
+    fulfill users' request.  
+
+    Use recommend_movies when a user asks for movie recommendations. If the user asks for general information about the movie, plots, or the movie ticket agent, use general_qa.
+    Use find_time to find a movie's time, find_price to find a movie's price, and find_balance to find a user's account balance. If the user wants to book a ticket, use book_ticket. If the 
+    request cannot be made with any of these functions, use file_request to file the request for customer support. If the request has multiple parts, break it down into sub-problems
+    and leverage any relevant functions as mentioned above. Have a preference towards using tools rather than guessing and always return a clear, detailed summary that 
+    does its best to satisfy the user request. 
     """
     ########################################################################
     #                          END OF YOUR CODE                            #
@@ -337,6 +367,11 @@ react_agent = dspy.ReAct(
     tools = [
         recommend_movies,
         general_qa,
+        find_balance,
+        find_price,
+        find_time,
+        file_request,
+        book_ticket
         ########################################################################
         ## TODO: add other tools for your agent here
         ########################################################################
