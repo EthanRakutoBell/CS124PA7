@@ -121,12 +121,13 @@ def similarity(u, v):
     dot_product = np.dot(u, v)
     u_square = np.square(u)
     v_square = np.square(v)
-    u_norm = np.sqrt(np.sum(u_square))
-    v_norm = np.sqrt(np.sum(v_square))
-    if u_norm == 0 or v_norm == 0:
+    u_norm = np.sqrt(np.sum(u_square)) # compute the L2 norm of u
+    v_norm = np.sqrt(np.sum(v_square)) # compute the L2 norm of v
+    if u_norm == 0 or v_norm == 0: # if either u or v has norm 0, return similarity of 0 to avoid division by zero
         similarity = 0
     else:
-        similarity = dot_product / (u_norm * v_norm)
+        # compute the cosine similarity as the dot product divided by the product of the norms
+        similarity = dot_product / (u_norm * v_norm) 
     ########################################################################
     similarity = 0
     ########################################################################
