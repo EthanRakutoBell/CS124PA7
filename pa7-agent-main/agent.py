@@ -524,7 +524,8 @@ class MemoryTools:
             # Hint: It may be helpful to review mem0's memory operations here:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
-            pass
+            # use .add from documentation to add content to memory
+            self.memory.add(content, user_id=user_id)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -565,7 +566,8 @@ class MemoryTools:
             # Hint: it would be helpful to read the documentation of 
             # mem0 to see how to use the `search` method: https://github.com/mem0ai/mem0
             ########################################################################
-            results = None
+            # from the chat_with_memories documentation
+            results = self.memory.search(query=query, user_id=user_id, limit=limit)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -596,7 +598,8 @@ class MemoryTools:
             # Hint: It may be helpful to review mem0's memory operations here:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
-            pass
+            # use .update from documentation
+            self.memory.update(memory_id=memory_id, data=new_content)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -612,7 +615,8 @@ class MemoryTools:
             # Hint: It may be helpful to review mem0's memory operations here:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
-            pass
+            # use .delete from documentation
+            self.memory.delete(memory_id=memory_id)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -675,17 +679,30 @@ class EnhancedMovieTicketAgent(dspy.Module):
         # if they are enabled
         ########################################################################
         # TODO: Add tools for the base agent
-        self.tools = []
+        self.tools = [
+            # tools for base agent
+            recommend_movies,
+            general_qa,
+            find_time,
+            find_price,
+            find_balance,
+            file_request,
+            book_ticket,
+        ]
 
         # enable web search
         if self.web_tools: 
             # TODO: add web search tool to self.tools and delete `pass`
-            pass
+            self.tools.append(self.web_tools.web_search)
         
         # add memory tools if enabled
         if self.memory_tools:
             # TODO: add the relevant memory tools here and delete `pass`
-            pass
+            self.tools.append(self.memory_tools.store_memory)
+            self.tools.append(self.memory_tools.update_memory)
+            self.tools.append(self.memory_tools.delete_memory)
+            self.tools.append(self.memory_tools.search_memories)
+            self.tools.append(self.memory_tools.get_all_memories)
        
         ########################################################################
         #                          END OF YOUR CODE                            #
