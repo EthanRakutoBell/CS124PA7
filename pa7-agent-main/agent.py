@@ -118,7 +118,15 @@ def similarity(u, v):
     Note: you should return 0 if u or v has norm 0
     """
     ########################################################################
-    # TODO: Compute cosine similarity between the two vectors.             #
+    dot_product = np.dot(u, v)
+    u_square = np.square(u)
+    v_square = np.square(v)
+    u_norm = np.sqrt(np.sum(u_square))
+    v_norm = np.sqrt(np.sum(v_square))
+    if u_norm == 0 or v_norm == 0:
+        similarity = 0
+    else:
+        similarity = dot_product / (u_norm * v_norm)
     ########################################################################
     similarity = 0
     ########################################################################
