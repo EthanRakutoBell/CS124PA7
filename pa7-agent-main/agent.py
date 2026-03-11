@@ -485,13 +485,13 @@ memory_config = {
     "embedder": {
         "provider": "together",
         "config": {
-            "model": "Alibaba-NLP/gte-modernbert-base"
+            "model": "intfloat/multilingual-e5-large-instruct"
         }
     },
     "vector_store": {
         "provider": "qdrant",
         "config": {
-            "embedding_model_dims": 768
+            "embedding_model_dims": 1024
         }
     }
 }
@@ -525,7 +525,7 @@ class MemoryTools:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
             # use .add from documentation to add content to memory
-            self.memory.add(content, user_id=user_id)
+            self.memory.add(messages=content, user_id=user_id)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
